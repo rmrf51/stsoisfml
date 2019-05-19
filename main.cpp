@@ -53,15 +53,16 @@ int main()
         Sprite sprite;//сфмл спрайт
 
 
-        // const int WW = 150;
-        // const int HH = 150; // you can change this to full window size later
+        const int WW = 150;
+        const int HH = 150; // you can change this to full window size later
 
-        // const int del = 6;
-        // const int arr[9] = {1, 1, 1, 1, 9, 1, 1, 1, 1};
+        const int del = 1;
+        const int offset = 0;
+        const int arr[9] = {-2, -1, 0, -1, 1, 1, 0, 1, 2};
 
 
-        // sf::Uint8 *pixels = new sf::Uint8[WW*HH*4];
-        // const sf::Uint8 *pixels1 = new sf::Uint8[WW*HH*4];
+        sf::Uint8 *pixels = new sf::Uint8[WW*HH*4];
+        const sf::Uint8 *pixels1 = new sf::Uint8[WW*HH*4];
 
     
         Player(String F, float X, float Y, float W, float H){  //Конструктор с параметрами(формальными) для класса Player. При создании объекта класса мы будем задавать имя файла, координату Х и У, ширину и высоту
@@ -70,26 +71,33 @@ int main()
 
             image.loadFromFile("images/" + File);//запихиваем в image наше изображение вместо File мы передадим то, что пропишем при создании объекта. В нашем случае "hero.png" и получится запись идентичная 	image.loadFromFile("images/hero/png");
             texture.loadFromImage(image);//закидываем наше изображение в текстуру
-            // pixels1 = image.getPixelsPtr();
+            pixels1 = image.getPixelsPtr();
 
-            // for(int i = 0; i < WW*HH*4; i += 1) {
-            //     pixels[i] = pixels1[i];
-            // }
+            for(int i = 0; i < WW*HH*4; i += 1) {
+                pixels[i] = pixels1[i];
+            }
 
-            // //delete[] pixels1;
+            //delete[] pixels1;
 
-            // for(int i = 0; i < WW*HH*4; i += 1) {
+            for(int i = 0; i < WW*HH*4; i++) {
+                pixels[i] = ((pixels[i - WW - 4] * arr[0] + pixels[i - WW] * arr[1] + pixels[i - WW + 4] * arr[2] + pixels[i - 4] * arr[3] + pixels[i] * arr[4] + pixels[i + 4] * arr[5] + pixels[i + WW - 4] * arr[6] + pixels[i + WW] * arr[7] + pixels[i + WW + 4] * arr[8]) / del + offset);
+                i++;
+                pixels[i] = ((pixels[i - WW - 4] * arr[0] + pixels[i - WW] * arr[1] + pixels[i - WW + 4] * arr[2] + pixels[i - 4] * arr[3] + pixels[i] * arr[4] + pixels[i + 4] * arr[5] + pixels[i + WW - 4] * arr[6] + pixels[i + WW] * arr[7] + pixels[i + WW + 4] * arr[8]) / del + offset); 
+                i++;
+                pixels[i] = ((pixels[i - WW - 4] * arr[0] + pixels[i - WW] * arr[1] + pixels[i - WW + 4] * arr[2] + pixels[i - 4] * arr[3] + pixels[i] * arr[4] + pixels[i + 4] * arr[5] + pixels[i + WW - 4] * arr[6] + pixels[i + WW] * arr[7] + pixels[i + WW + 4] * arr[8]) / del + offset);
+                i++;
 
-            //     pixels[i] = (pixels[i - WW - 4] * arr[0] + pixels[i - WW] * arr[1] + pixels[i - WW + 4] * arr[2] + pixels[i - 4] * arr[3] + pixels[i] * arr[4] + pixels[i + 4] * arr[5] + pixels[i + WW - 4] * arr[6] + pixels[i + WW] * arr[7] + pixels[i + WW + 4] * arr[8]) / del;
-            //     i++;
-            //     pixels[i] = (pixels[i - WW - 4] * arr[0] + pixels[i - WW] * arr[1] + pixels[i - WW + 4] * arr[2] + pixels[i - 4] * arr[3] + pixels[i] * arr[4] + pixels[i + 4] * arr[5] + pixels[i + WW - 4] * arr[6] + pixels[i + WW] * arr[7] + pixels[i + WW + 4] * arr[8]) / del;
-            //     i++;
-            //     pixels[i] = (pixels[i - WW - 4] * arr[0] + pixels[i - WW] * arr[1] + pixels[i - WW + 4] * arr[2] + pixels[i - 4] * arr[3] + pixels[i] * arr[4] + pixels[i + 4] * arr[5] + pixels[i + WW - 4] * arr[6] + pixels[i + WW] * arr[7] + pixels[i + WW + 4] * arr[8]) / del;
-            //     i++;
+
+                // pixels[i] = (pixels[i - WW - 4] * arr[0] / del  + pixels[i - WW] * arr[1] / del  + pixels[i - WW + 4] * arr[2] / del  + pixels[i - 4] * arr[3] / del  + pixels[i] * arr[4] / del  + pixels[i + 4] * arr[5] / del  + pixels[i + WW - 4] * arr[6] / del  + pixels[i + WW] * arr[7] / del  + pixels[i + WW + 4] * arr[8] / del ); // del;
+                // i++;
+                // pixels[i] = (pixels[i - WW - 4] * arr[0] / del  + pixels[i - WW] * arr[1] / del  + pixels[i - WW + 4] * arr[2] / del  + pixels[i - 4] * arr[3] / del  + pixels[i] * arr[4] / del  + pixels[i + 4] * arr[5] / del  + pixels[i + WW - 4] * arr[6] / del  + pixels[i + WW] * arr[7] / del  + pixels[i + WW + 4] * arr[8] / del ); // del;
+                // i++;
+                // pixels[i] = (pixels[i - WW - 4] * arr[0] / del  + pixels[i - WW] * arr[1] / del  + pixels[i - WW + 4] * arr[2] / del  + pixels[i - 4] * arr[3] / del  + pixels[i] * arr[4] / del  + pixels[i + 4] * arr[5] / del  + pixels[i + WW - 4] * arr[6] / del  + pixels[i + WW] * arr[7] / del  + pixels[i + WW + 4] * arr[8] / del ); // del;
+                // i++;
             
-            // }
+            }
 
-            // texture.update(pixels);
+            texture.update(pixels);
             
             
 
