@@ -146,9 +146,11 @@ void menu(RenderWindow & window) {
     
     sf::Uint8 *pixelss = new sf::Uint8[64*64*4];
     const sf::Uint8 *pixelss1 = new sf::Uint8[64*64*4];
+    sf::Uint8 pixelsss[64][64*4];
 
-    std::complex<double> GG[64*64*4];
-    std::complex<double> YY[64*64*4];
+    std::complex<double> GG[64][64*4];
+    std::complex<double> YY[64][64*4];
+    std::complex<double> YYY[64*64*4];
 
     pixels1 = furi2Image.getPixelsPtr();
 
@@ -157,29 +159,69 @@ void menu(RenderWindow & window) {
     }
 
 
+    int k = 0;
+    for(int i = 0; i < 64; ++i){
+        for(int j = 0; j < 64*4; ++j){
 
-    for(int u=0; u<N; ++u){
-        for (int n = u/(4*WW)*4*WW; n < (u/(4*WW)*4*WW)+4*WW; ++n)
-        {
-            double w = -2 * 3.1415 * u * n / N;
+            pixelsss[i][j] = pixelss[k++];
+
+        }
+    }
+    k = 0;
+
+    for(int i = 0; i < 64; ++i){
+        for(int j = 0; j < 64*4; ++j){
+
+            double w = -2 * 3.1415 * i * j / N;
             std::complex<double> c(cos(w), sin(w));//= std::complex(sin(w), cos(w));
-            double pixn = pixels[n];
-            G[u] += ((c * pixn)  / (double)NN);
-        } 
-        //G[u] = G[u] / N;
+            double pixn = pixelsss[i][j];
+            GG[i][j] += ((c * pixn)  / (double)NN);
+
+        }
     }
 
-    for(int u=0; u<N; ++u){
-        for (int n = 0; n < HH * 4; ++n)
-        {
-            double w = -2 * 3.1415 * u * n / N;
+    for(int i = 0; i < 64; ++i){
+        for(int j = 0; j < 64*4; ++j){
+
+            double w = -2 * 3.1415 * i * j / N;
             std::complex<double> c(cos(w), sin(w));//= std::complex(sin(w), cos(w));
-            //double pixn = pixels[n];
-            //Y[u] += ((c * G[n * (u/(WW*4)+WW*4)])  / (double)NN);
-            YY[u] += ((c * G[(n*WW*4)+u%(WW*4)])  / (double)NN);
-        } 
-        //G[u] = G[u] / N;
+            double pixn = pixelsss[j][i];
+            YY[i][j] += ((c * pixn)  / (double)NN);
+
+        }
     }
+
+    for(int i = 0; i < 64; ++i){
+        for(int j = 0; j < 64*4; ++j){
+
+            YYY[k++] = YY[i][j];
+
+        }
+    }
+
+
+    // for(int u=0; u<N; ++u){
+    //     for (int n = u/(4*WW)*4*WW; n < (u/(4*WW)*4*WW)+4*WW; ++n)
+    //     {
+    //         double w = -2 * 3.1415 * u * n / N;
+    //         std::complex<double> c(cos(w), sin(w));//= std::complex(sin(w), cos(w));
+    //         double pixn = pixels[n];
+    //         GG[u] += ((c * pixn)  / (double)NN);
+    //     } 
+    //     //G[u] = G[u] / N;
+    // }
+
+    // for(int u=0; u<N; ++u){
+    //     for (int n = 0; n < HH * 4; ++n)
+    //     {
+    //         double w = -2 * 3.1415 * u * n / N;
+    //         std::complex<double> c(cos(w), sin(w));//= std::complex(sin(w), cos(w));
+    //         //double pixn = pixels[n];
+    //         //Y[u] += ((c * G[n * (u/(WW*4)+WW*4)])  / (double)NN);
+    //         YY[u] += ((c * G[(n*WW*4)+u%(WW*4)])  / (double)NN);
+    //     } 
+    //     //G[u] = G[u] / N;
+    // }
 
     outlast.open("data_outlast.txt");
     if (!outlast.is_open())
@@ -190,7 +232,7 @@ void menu(RenderWindow & window) {
 
 
     for(int i = 0; i < N; i += 1) {
-        pixelss[i] = real(YY[i]);
+        pixelss[i] = real(YYY[i]);
 
         if(i % 64 == WW * 4){
             outlast << std::endl;

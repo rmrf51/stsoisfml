@@ -63,6 +63,7 @@ int main()
 
         sf::Uint8 *pixels = new sf::Uint8[WW*HH*4];
         const sf::Uint8 *pixels1 = new sf::Uint8[WW*HH*4];
+        //sf::Uint8 pixelsss[150][150*4];
 
     
         Player(String F, float X, float Y, float W, float H){  //Конструктор с параметрами(формальными) для класса Player. При создании объекта класса мы будем задавать имя файла, координату Х и У, ширину и высоту
@@ -77,8 +78,37 @@ int main()
                 pixels[i] = pixels1[i];
             }
 
+            // int k = 0;
+            // for(int i = 0; i < 150; ++i){
+            //     for(int j = 0; j < 150*4; ++j){
+
+            //         pixelsss[i][j] = pixels[k++];
+
+            //     }
+            // }
+            // k = 0;
+
+            // for(int i = 0; i < 150; ++i){
+            //     for(int j = 0; j < 150*4; ++j){
+
+            //         pixelsss[i][j] = (pixelsss[i-1][j-1] * arr[0] + pixelsss[i-1][j] * arr[1] + pixelsss[i-1][j+1] * arr[2] + pixelsss[i][j-1] * arr[3] + pixelsss[i][j] * arr[4] + pixelsss[i][j+1] * arr[5] + pixelsss[i+1][j-1] * arr[6] + pixelsss[i+1][j] * arr[7] + pixelsss[i+1][j+1] * arr[8]) / del + offset;
+
+            //     }
+            // }
+
+            // for(int i = 0; i < 150; ++i){
+            //     for(int j = 0; j < 150*4; ++j){
+
+            //         pixels[k++] = pixelsss[i][j];
+
+            //     }
+            // }
+
+
+
             //delete[] pixels1;
 
+            
             for(int i = 0; i < WW*HH*4; i++) {
                 pixels[i] = ((pixels[i - WW - 4] * arr[0] + pixels[i - WW] * arr[1] + pixels[i - WW + 4] * arr[2] + pixels[i - 4] * arr[3] + pixels[i] * arr[4] + pixels[i + 4] * arr[5] + pixels[i + WW - 4] * arr[6] + pixels[i + WW] * arr[7] + pixels[i + WW + 4] * arr[8]) / del + offset);
                 i++;
