@@ -78,14 +78,14 @@ void menu(RenderWindow & window) {
     }
 
     out1.open("data_out_to_sho_bilo.txt");
-    if (!out.is_open())
+    if (!out1.is_open())
     {
         std::cout << "Error opening file data_out_Furi.txt.\n";
         exit(EXIT_FAILURE);
     }
 
     out2.open("data_out_begin.txt");
-    if (!out.is_open())
+    if (!out2.is_open())
     {
         std::cout << "Error opening file data_out_Furi.txt.\n";
         exit(EXIT_FAILURE);
@@ -97,7 +97,7 @@ void menu(RenderWindow & window) {
         if(i % 64 == WW * 4){
             out2 << std::endl;
         }
-        out2 << pixels1[i];
+        out2 << " " << (int)pixels[i];
     }
 
     
@@ -122,7 +122,7 @@ void menu(RenderWindow & window) {
     }
 
     for(int i = 0; i < N; i += 1) {
-
+       pixels[i] = real(Y[i]);
         if(i % 64 == WW * 4){
             out1 << std::endl;
         }
@@ -152,10 +152,11 @@ void menu(RenderWindow & window) {
     std::complex<double> YY[64][64*4];
     std::complex<double> YYY[64*64*4];
 
-    pixels1 = furi2Image.getPixelsPtr();
+    pixelss1 = furi2Image.getPixelsPtr();
 
     for(int i = 0; i < N; i++) {
         pixelss[i] = pixelss1[i];
+
     }
 
 
@@ -176,16 +177,38 @@ void menu(RenderWindow & window) {
             std::complex<double> c(cos(w), sin(w));//= std::complex(sin(w), cos(w));
             double pixn = pixelsss[i][j];
             GG[i][j] += ((c * pixn)  / (double)NN);
+            //std::cout << " " << (GG[i][j]);
+        }
+    }
+
+
+
+    //Сохранение промежуточного варианта
+    for(int i = 0; i < 64; ++i){
+        for(int j = 0; j < 64*4; ++j){
+
+            YYY[k++] = GG[i][j];
 
         }
     }
 
-    for(int i = 0; i < 64; ++i){
-        for(int j = 0; j < 64*4; ++j){
+    k=0;
+
+    for(int i = 0; i < N; i += 1) {
+        pixelss[i] = real(YYY[i]);
+    }
+
+
+    furi2Texture.update(pixelss);
+    furi2Texture.copyToImage().saveToFile("FurieshkaPromej.png");
+    //-------------------------------------------------
+
+    for(int j = 0; j < 64*4; ++j){
+        for(int i = 0; i < 64; ++i){
 
             double w = -2 * 3.1415 * i * j / N;
             std::complex<double> c(cos(w), sin(w));//= std::complex(sin(w), cos(w));
-            double pixn = pixelsss[j][i];
+            double pixn = real(GG[i][j]);
             YY[i][j] += ((c * pixn)  / (double)NN);
 
         }
@@ -237,7 +260,7 @@ void menu(RenderWindow & window) {
         if(i % 64 == WW * 4){
             outlast << std::endl;
         }
-        outlast << YY[i];
+        outlast << (int)pixelss[i];
     }
 
     furi2Texture.update(pixelss);
